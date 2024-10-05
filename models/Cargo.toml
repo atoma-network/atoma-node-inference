@@ -31,4 +31,3 @@ tokenizers = { workspace = true }
 [features]
 nccl = ["dep:cudarc", "cudarc/nccl"]
 cuda = ["dep:cudarc"]
-cpu = ["dep:csrc"]
