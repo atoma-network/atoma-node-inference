@@ -24,4 +24,15 @@ async-openai.workspace = true
 [features]
 vllm = ["atoma-backends/vllm"]
 nccl = ["vllm", "atoma-backends/nccl"]
-cuda = ["dep:cudarc", "cudarc/cuda"]
+cuda = [
+    "dep:cudarc",
+    "cudarc/std",
+    "cudarc/cublas",
+    "cudarc/cublaslt",
+    "cudarc/curand",
+    "cudarc/driver",
+    "cudarc/nvrtc",
+    "cudarc/f16",
+    "cudarc/cuda-version-from-build-system",
+    "cudarc/dynamic-linking"
+]
