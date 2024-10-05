@@ -519,7 +519,7 @@ mod tests {
     use tokenizers::Tokenizer;
 
     const EOS_TOKEN: &str = "</s>";
-
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_llama_model() -> Result<()> {
@@ -704,6 +704,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_llama_model_long() -> Result<()> {
@@ -915,6 +916,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_llama_model_random_block_order() -> Result<()> {
@@ -1151,6 +1153,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_llama_model_llama3_2_1b() -> Result<()> {
@@ -1396,6 +1399,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_llama_model_batch() -> Result<()> {

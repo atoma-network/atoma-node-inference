@@ -748,6 +748,7 @@ impl TryFrom<(String, GenerateRequestOutput)> for ChatCompletionResponse {
     }
 }
 
+#[cfg(feature = "cpu")]
 #[cfg(test)]
 pub mod json_schema_tests {
     // TODO: Move check functions to a test utils module.
@@ -773,6 +774,7 @@ pub mod json_schema_tests {
         expect_file.assert_eq(schema);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     /// Used in tandem with a schema file, this will check if there are
     /// changes to the JSON API schema, and show a diff if so.
@@ -790,6 +792,7 @@ pub mod json_schema_tests {
 
     // TODO: Add the above test for response_schema
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn request_schema_control() {
         let schema_path = concat!(env!("CARGO_MANIFEST_DIR"), "/request_schema.json");
@@ -806,6 +809,7 @@ pub mod json_schema_tests {
         );
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn deserialize_request_body_basic() {
         let json_request_body = r#"
@@ -845,6 +849,7 @@ pub mod json_schema_tests {
         );
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn deserialize_user_message() {
         let json_user_message_text = r#"
@@ -889,6 +894,7 @@ pub mod json_schema_tests {
         );
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn deserialize_assistant_message() {
         let json_assistant_message_text = r#"
@@ -931,6 +937,7 @@ pub mod json_schema_tests {
         );
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn deserialize_tool_message() {
         let json_tool_message_text = r#"
@@ -952,6 +959,7 @@ pub mod json_schema_tests {
         );
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn deserialize_message_content_text() {
         let json_message_content_text = r#"
@@ -963,6 +971,7 @@ pub mod json_schema_tests {
         assert!(message_content.is_ok());
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn deserialize_message_content_array() {
         let json_message_content_array = r#"
@@ -986,6 +995,7 @@ pub mod json_schema_tests {
         assert!(message_content.is_ok());
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_messages_to_prompt() {
         // Create some sample messages
@@ -1021,6 +1031,7 @@ pub mod json_schema_tests {
         assert_eq!(prompt, expected_prompt);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_empty_messages() {
         let messages: Vec<Message> = vec![];
@@ -1030,6 +1041,7 @@ pub mod json_schema_tests {
         assert_eq!(prompt, expected_prompt);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_message_with_no_content() {
         let messages = vec![
@@ -1058,6 +1070,7 @@ pub mod json_schema_tests {
         assert_eq!(prompt, expected_prompt);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_message_to_prompt_without_sytem() {
         let messages = vec![
@@ -1081,6 +1094,7 @@ pub mod json_schema_tests {
         assert_eq!(prompt, expected_prompt);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_message_to_prompt_without_user() {
         let messages = vec![
@@ -1108,6 +1122,7 @@ pub mod json_schema_tests {
         assert_eq!(prompt, expected_prompt);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_deserialize_chat_completion_response() {
         let json = json!({
@@ -1157,6 +1172,7 @@ pub mod json_schema_tests {
         assert_eq!(response.usage.total_tokens, 21);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_deserialize_choice() {
         let json = json!({
@@ -1175,6 +1191,7 @@ pub mod json_schema_tests {
         assert!(matches!(choice.finish_reason, FinishReason::Stopped));
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_deserialize_finish_reason() {
         assert_eq!(
@@ -1191,6 +1208,7 @@ pub mod json_schema_tests {
         );
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_deserialize_usage() {
         let json = json!({
@@ -1206,6 +1224,7 @@ pub mod json_schema_tests {
         assert_eq!(usage.total_tokens, 21);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_deserialize_choice_with_logprobs() {
         let json = json!({

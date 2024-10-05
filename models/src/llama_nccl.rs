@@ -358,6 +358,7 @@ mod tests {
 
     const EOS_TOKEN: &str = "</s>";
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_llama_nccl_model_random_block_order() -> Result<()> {

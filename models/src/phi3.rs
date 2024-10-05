@@ -449,6 +449,7 @@ mod tests {
     const EOS_TOKEN: &str = "ӏ ";
     const BLOCK_SIZE: usize = 16;
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
 
@@ -636,6 +637,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_phi3_model_batch() -> Result<()> {
@@ -995,6 +997,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_phi3_model_long() -> Result<()> {
