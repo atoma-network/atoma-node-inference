@@ -23,3 +23,5 @@ async-openai.workspace = true
 [features]
 vllm = ["atoma-backends/vllm"]
 nccl = ["vllm", "atoma-backends/nccl"]
+cuda = ["dep:cudarc"]
+cpu = ["dep:csrc"]
