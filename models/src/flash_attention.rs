@@ -471,7 +471,7 @@ impl FlashAttention {
 mod tests {
     use super::*;
     use candle_core::{DType, Device, Tensor};
-
+    #[cfg(feature = "cuda")]
     #[test]
     fn test_new() {
         let device = Device::new_cuda(0).unwrap();
@@ -489,13 +489,14 @@ mod tests {
         assert_eq!(flash_attention.kv_cache_dtype, DType::F32);
     }
 
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_new_invalid_heads() {
         let device = Device::Cpu;
         let result = FlashAttention::new(7, 4, 64, 1.0, None, None, DType::F32, device);
         assert!(result.is_err());
     }
-
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_new_invalid_head_dim() {
         let device = Device::Cpu;
@@ -514,7 +515,7 @@ mod tests {
         let shape = FlashAttention::get_kv_cache_shape(10, 32, 4, 64);
         assert_eq!(shape, vec![2, 10, 32, 4, 64]);
     }
-
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_split_kv_cache() {
         let device = Device::Cpu;
@@ -531,7 +532,7 @@ mod tests {
         assert_eq!(key_cache.shape().dims(), &[10, 32, 4, 64]);
         assert_eq!(value_cache.shape().dims(), &[10, 32, 4, 64]);
     }
-
+    #[cfg(feature = "cpu")]
     #[test]
     fn test_split_kv_cache_invalid_shape() {
         let device = Device::Cpu;
@@ -542,7 +543,7 @@ mod tests {
         let result = flash_attention.split_kv_cache(&kv_cache);
         assert!(result.is_err());
     }
-
+    #[cfg(feature = "cuda")]
     #[test]
     fn test_forward() {
         let device = Device::new_cuda(0).unwrap();
@@ -627,6 +628,7 @@ mod tests {
             .any(|&x| x == 1));
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     fn test_forward_with_varlen() {
         let device = Device::new_cuda(0).unwrap();

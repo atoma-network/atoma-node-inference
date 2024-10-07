@@ -451,6 +451,7 @@ mod tests {
     const EOS_TOKEN: &str = "ӏ ";
     const BLOCK_SIZE: usize = 16;
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_mistral_model() -> Result<()> {
@@ -646,7 +647,7 @@ mod tests {
         Ok(())
     }
 
-    //  cargo test test_mistral_model_batch -- --exact
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_mistral_model_batch() -> Result<()> {
@@ -1018,6 +1019,7 @@ mod tests {
         Ok(())
     }
 
+    #[cfg(feature = "cuda")]
     #[test]
     #[serial]
     fn test_mistral_model_long() -> Result<()> {
