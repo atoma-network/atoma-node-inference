@@ -1,6 +1,5 @@
 use clap::Parser;
 use std::{
-    env,
     sync::{
         atomic::{AtomicU64, Ordering},
         Arc,
@@ -35,15 +34,13 @@ use api::{
 };
 
 pub mod api;
+mod config;
 #[cfg(test)]
 pub mod tests;
+use config::CONFIG;
 
 // TODO: Add version path prefix, eg. `/v1` although maybe something along the lines of `/beta` would be more fitting?
-/// The URL path to POST JSON for model chat completions.
-pub const CHAT_COMPLETIONS_PATH: &str = "/chat/completions";
-pub const DEFAULT_SERVER_ADDRESS: &str = "0.0.0.0";
-pub const DEFAULT_SERVER_PORT: &str = "8080";
-pub const AUTH_BEARER_PREFIX: &str = "Bearer ";
+pub const AUTH_BEARER_PREFIX: &str = "Bearer "; // TODO: This will always be bearer, as per the OpenAI spec. Maybe remove this constant?
 
 #[derive(Debug, Parser)]
 #[command(author, version, about, long_about = None)]
@@ -66,12 +63,15 @@ async fn main() -> anyhow::Result<()> {
     let cli = Args::parse();
 
     // TODO: Write a clap cli for passing arguments
-    let address =
-        env::var("ATOMA_NODE_INFERENCE_SERVER_ADDRESS").unwrap_or(DEFAULT_SERVER_ADDRESS.into());
+    let address = &CONFIG.server_address;
+    let port = &CONFIG.server_port;
     let config_path = cli.config_path;
-    let port = env::var("ATOMA_NODE_INFERENCE_SERVER_PORT").unwrap_or(DEFAULT_SERVER_PORT.into());
     let listener = TcpListener::bind(format!("{address}:{port}")).await?;
+    app_start(listener, config_path).await
+}
 
+/// Starts the server and LLM service. Used also in integration tests.
+pub async fn app_start(listener: TcpListener, config_path: String) -> anyhow::Result<()> {
     let (llm_service_sender, llm_service_receiver) = mpsc::unbounded_channel();
     let (shutdown_signal_sender, shutdown_signal_receiver) = mpsc::channel(1);
     // TODO: Add model dispatcher
@@ -105,9 +105,9 @@ pub async fn run_server(
 ) -> anyhow::Result<()> {
     let shutdown_signal_sender = app_state.shutdown_signal_sender.clone();
     let http_router = Router::new()
-        .route(CHAT_COMPLETIONS_PATH, post(completion_handler))
+        .route(&CONFIG.chat_completions_path, post(completion_handler))
         .route(
-            &format!("{CHAT_COMPLETIONS_PATH}/validate"),
+            &format!("{}/validate", &CONFIG.chat_completions_path),
             post(validate_completion_handler),
         )
         .with_state(app_state);
